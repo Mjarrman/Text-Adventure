@@ -6,6 +6,7 @@ class NonPlayableCharacter():
     def __str__(self):
         return self.name
 
+
 class Trader(NonPlayableCharacter):
     def __init__(self):
         self.name = "Trader"
@@ -15,7 +16,10 @@ class Trader(NonPlayableCharacter):
                           items.CrustyBread(),
                           items.HealingPotion(),
                           items.RustySword(),
-                          items.LeatherArmor()]
+                          items.LeatherArmor(),
+                          items.IronArmor(),
+                          items.IronSword,
+                          items.IronShield,]
 
 
 class Wizard(NonPlayableCharacter):
@@ -23,3 +27,5 @@ class Wizard(NonPlayableCharacter):
         self.name = "Wizard"
         self.gold = 1
         self.inventory = [items.BookOfRunes()]
+
+

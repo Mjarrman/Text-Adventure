@@ -1,7 +1,12 @@
 import enemies
 import npc
 import random
+import items
 from items import QuestItem
+from inventory import get_inventory
+import time
+
+
 class MapTile:
 
 
@@ -21,7 +26,6 @@ class StartTile(MapTile):
         return "You are on your way home from a long campaign in the hinterlands,\n" \
                " as you are walking down the path you come to a cross roads.\n" \
                " you can go any of four directions."
-
 
 
 class EnemyTile(MapTile):
@@ -93,16 +97,50 @@ class FindGoldTile(MapTile):
 
 class StoryTileOne(MapTile, QuestItem):
     def intro_text(self):
-        print("You walk into a ruined village, raided by gods knows what.\n" \
+        print("You walk into a ruined village, raided by gods knows what.\n"
               "Among the wreckage you find a small coin.\n"
               "Inscribed upon it are three unreadable runes.\n"
               "Perhaps a wizard could read them.")
-        
+        get_inventory().append(items.SmallCoin())
+        return "You have acquired a small coin."
+
+
 class StoryTileTwo(MapTile, QuestItem):
     def intro_text(self):
         print("You see a strange figure in the distance.\n"
-              "As you walk closer you realize it is a wizard.\n"
+              "As you walk closer, you realize it is a wizard.\n"
               " Perhaps they can read the runes on the small coin you found.")
+        time.sleep(.5)
+        print("The wizard says 'the runes say, go north-east to find a great treasure...'")
+
+
+'''class StoryTileThree(MapTile, QuestItem):
+    SmallCoinInInventory = [item for item in self.inventory if isinstance(item, items.Consumable)]
+    def __init__(self, x, y):
+        self.gold = random.randint(1, 50)
+        self.gold_claimed = False
+        super().__init__(x, y)
+
+    def modify_player(self, player):
+        if not self.gold_claimed:
+            self.gold_claimed = True
+            player.gold = player.gold + self.gold
+            print("+{} gold added.".format(self.gold))
+
+    def intro_text(self):
+        if self.gold_claimed:
+            return "A small clearing, perhaps there is something you need to make use of it..."
+        else:
+            return "You have found the fabled treasure!"'''
+
+
+class RandomTile(MapTile):
+    def intro_text(self):
+        print("Ahead you see a villager, let's see what he has to say.")
+        dialogue = ["Watch out behind you!", "Nobody ever came back from the castle...",
+                    "Giant spiders are pushovers."]
+        conversation = random.choice(dialogue)
+        return conversation
 
 
 class TraderTile(MapTile):
@@ -161,15 +199,15 @@ class TraderTile(MapTile):
 
 
 world_dsl = """
-|FG|EN|EN|EN|EN|EN|EN|EN|EN|FG|
-|EN|TT|EN|EN|FG|EN|EN|EN|EN|EN|
-|EN|FG|EN|EN|EN|EN|FG|EN|EN|EN|
-|EN|EN|ST|EN|EN|EN|EN|EN|FG|EN|
-|FG|EN|EN|FG|EN|EN|FG|EN|EN|EN|
-|EN|EN|EN|EN|FG|S2|EN|EN|FG|EN|
-|EN|FG|EN|EN|EN|FG|TT|EN|EN|EN|
-|EN|EN|S1|EN|EN|EN|FG|EN|EN|EN|
-|EN|EN|FG|EN|EN|EN|EN|EN|EN|VT|
+|FG|EN|EN|EN|EN|EN|FG|EN|EN|FG|EN|
+|EN|TT|EN|EN|FG|EN|EN|EN|EN|EN|EN|
+|EN|FG|RT|EN|EN|EN|FG|EN|EN|EN|EN|
+|EN|EN|ST|EN|EN|EN|EN|EN|FG|EN|FG|
+|FG|EN|EN|FG|EN|EN|FG|EN|EN|EN|EN|
+|EN|EN|EN|EN|FG|S2|EN|EN|FG|EN|FG|
+|EN|FG|EN|EN|EN|FG|TT|EN|EN|EN|EN|
+|EN|EN|S1|EN|EN|EN|FG|EN|FG|EN|EN|
+|EN|EN|FG|EN|FG|EN|EN|EN|EN|EN|VT|
 """
 
 
@@ -195,6 +233,8 @@ tile_type_dict = {"VT": VictoryTile,
                   "TT": TraderTile,
                   "S1": StoryTileOne,
                   "S2": StoryTileTwo,
+                  #"S3": StoryTileThree,
+                  "RT": RandomTile,
                   "  ": None}
 
 world_map = []

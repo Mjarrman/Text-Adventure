@@ -11,11 +11,14 @@ class BookOfRunes(QuestItem):
         self.description = "An ancient tome with runes and their meaning written in it"
         self.value = 500
 
+
 class SmallCoin(QuestItem):
     def __init__(self):
         self.name = "Small coin"
         self.description = "A small coin with three runes inscribed upon it"
         self.value = 1
+
+
 ############################################################################
 class Weapon:
     def __init__(self):
@@ -53,9 +56,16 @@ class Dagger(Weapon):
 class RustySword(Weapon):
     def __init__(self):
         self.name = "Rusty Sword"
-        self.description = "This sword is sgowing it's age.\nBut still has some fight in it"
+        self.description = "This sword is showing it's age.\nBut still has some fight in it"
         self.damage = 20
         self.value = 250
+
+
+class IronSword(Weapon):
+    def __init__(self):
+        self.name = "Iron Sword"
+        self.description = "A sturdy Iron Sword"
+        
 
 ##############################################################################
 class Consumable:
@@ -65,11 +75,13 @@ class Consumable:
     def __str__(self):
         return "{} (+{} HP)".format(self.name, self.healing_value)
 
+
 class CrustyBread(Consumable):
     def __init__(self):
         self.name = "Crusty Bread"
         self.healing_value = 10
         self.value = 10
+
 
 class HealingPotion(Consumable):
     def __init__(self):
@@ -77,11 +89,13 @@ class HealingPotion(Consumable):
         self.healing_value = 50
         self.value = 60
 
+
 class ManaPotion(Consumable):
     def __init__(self):
         self.name = "Mana Potion"
         self.mana_value = 50
         self.value = 120
+
 
 class Apple(Consumable):
     def __init__(self):
@@ -96,6 +110,7 @@ class Armor:
     def __str__(self):
         return "{} (+{} Armor)".format(self.name, self.defence_value)
 
+
 class LeatherArmor(Armor):
     def __init__(self):
         self.name = "Leather armor"
@@ -103,9 +118,26 @@ class LeatherArmor(Armor):
         self.defence_value = 5
         self.value = 150
 
+
 class WoodenShield(Armor):
     def __init__(self):
         self.name = "Wooden Shield"
         self.description = "A simple wooden shield"
         self.defence_value = 1
         self.value = 15
+
+
+class IronArmor(Armor):
+    def __init__(self):
+        self.name = "Iron Armor"
+        self.description = "Sturdy Iron Armor"
+        self.defence_value = 8
+        self.value = 250
+
+
+class IronShield(Armor):
+    def __init__(self):
+        self.name = "Iron Shield"
+        self.description = "A sturdy Iron Shield"
+        self.defence_value = 6
+        self.value = 200

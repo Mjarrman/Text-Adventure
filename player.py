@@ -1,13 +1,15 @@
 import items
 import world
+from inventory import get_inventory
+
 
 class Player:
     def __init__(self):
-        self.inventory = [items.Rock(), items.WoodenShield(), items.Dagger(), items.Fist(), items.CrustyBread(),items.CrustyBread, items.Apple()]
+        self.inventory = get_inventory()
         self.x = world.start_tile_location[0]
         self.y = world.start_tile_location[1]
         self.hp = 100
-        self.gold = 5
+        self.gold = 15
         self.victory = False
         self.defence = 1
 
@@ -40,11 +42,6 @@ class Player:
                 valid = True
             except (ValueError, IndexError):
                 print("Invalid choice, try again.")
-
-
-    def mana(self):
-        mana = [item for item in self.inventory if isinstance(item, item.Consumable)]
-
 
     def heal(self):
         consumables = [item for item in self.inventory if isinstance(item, items.Consumable)]

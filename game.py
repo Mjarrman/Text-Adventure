@@ -1,4 +1,5 @@
 from collections import OrderedDict
+
 from player import Player
 import world
 
@@ -15,6 +16,7 @@ def play():
             choose_action(room, player)
         elif not player.is_alive():
             print("You have succumbed to the evils of this world...")
+
 
 def choose_action(room, player):
     action = None
