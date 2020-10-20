@@ -106,16 +106,19 @@ class StoryTileOne(MapTile, QuestItem):
 
 
 class StoryTileTwo(MapTile, QuestItem):
-    def intro_text(self):
-        print("You see a strange figure in the distance.\n"
-              "As you walk closer, you realize it is a wizard.\n"
-              " Perhaps they can read the runes on the small coin you found.")
-        time.sleep(.5)
-        print("The wizard says 'the runes say, go north-east to find a great treasure...'")
-
+    def check_if_item(self):
+        item_check = [item for item in self.inventory if isinstance(item, items.SmallCoin)]
+        if item_check:
+            print("You see a strange figure in the distance.\n"
+                  "As you walk closer, you realize it is a wizard.\n"
+                  " Perhaps they can read the runes on the small coin you found.")
+            time.sleep(.5)
+            print("The wizard says 'the runes say, go north-east to find a great treasure...'")
+        else:
+            print("You have no business with me!")
 
 '''class StoryTileThree(MapTile, QuestItem):
-    SmallCoinInInventory = [item for item in self.inventory if isinstance(item, items.Consumable)]
+    Item_check = [item for item in self.inventory if isinstance(item, items.Consumable)]
     def __init__(self, x, y):
         self.gold = random.randint(1, 50)
         self.gold_claimed = False
@@ -203,10 +206,10 @@ world_dsl = """
 |EN|TT|EN|EN|FG|EN|EN|EN|EN|EN|EN|
 |EN|FG|RT|EN|EN|EN|FG|EN|EN|EN|EN|
 |EN|EN|ST|EN|EN|EN|EN|EN|FG|EN|FG|
-|FG|EN|EN|FG|EN|EN|FG|EN|EN|EN|EN|
-|EN|EN|EN|EN|FG|S2|EN|EN|FG|EN|FG|
+|FG|EN|S1|FG|EN|EN|FG|EN|EN|EN|EN|
+|EN|EN|S2|EN|FG|EN|EN|EN|FG|EN|FG|
 |EN|FG|EN|EN|EN|FG|TT|EN|EN|EN|EN|
-|EN|EN|S1|EN|EN|EN|FG|EN|FG|EN|EN|
+|EN|EN|EN|EN|EN|EN|FG|EN|FG|EN|EN|
 |EN|EN|FG|EN|FG|EN|EN|EN|EN|EN|VT|
 """
 
