@@ -8,8 +8,6 @@ import time
 
 
 class MapTile:
-
-
     def __init__(self, x, y):
         self.x = x
         self.y = y
@@ -97,49 +95,48 @@ class FindGoldTile(MapTile):
 
 class StoryTileOne(MapTile, QuestItem):
     def intro_text(self):
+        player_inventory = get_inventory()
         print("You walk into a ruined village, raided by gods knows what.\n"
               "Among the wreckage you find a small coin.\n"
               "Inscribed upon it are three unreadable runes.\n"
               "Perhaps a wizard could read them.")
-        get_inventory().append(items.SmallCoin())
+        player_inventory.append(items.SmallCoin())
         return "You have acquired a small coin."
 
 
 class StoryTileTwo(MapTile, QuestItem):
-    def check_if_item(self):
-        item_check = [item for item in self.inventory if isinstance(item, items.SmallCoin)]
+    def intro_text(self):
+        player_inventory = get_inventory()
+        item_check = [item for item in player_inventory if isinstance(item, items.SmallCoin)]
         if item_check:
             print("You see a strange figure in the distance.\n"
                   "As you walk closer, you realize it is a wizard.\n"
                   " Perhaps they can read the runes on the small coin you found.")
-            time.sleep(.5)
-            print("The wizard says 'the runes say, go north-east to find a great treasure...'")
+            time.sleep(2.5)
+            return "The wizard says 'the runes say, go north-east to find a great treasure...'"
         else:
-            print("You have no business with me!")
+            print("You see a strange figure in the distance.\n"
+                  "As you walk closer, you realize it is a wizard.\n")
+            time.sleep(2.5)
+            return "The wizard shouts. 'You have no business with me!'"
 
-'''class StoryTileThree(MapTile, QuestItem):
-    Item_check = [item for item in self.inventory if isinstance(item, items.Consumable)]
-    def __init__(self, x, y):
-        self.gold = random.randint(1, 50)
-        self.gold_claimed = False
-        super().__init__(x, y)
 
-    def modify_player(self, player):
-        if not self.gold_claimed:
-            self.gold_claimed = True
-            player.gold = player.gold + self.gold
-            print("+{} gold added.".format(self.gold))
-
+class StoryTileThree(MapTile, QuestItem):
     def intro_text(self):
-        if self.gold_claimed:
-            return "A small clearing, perhaps there is something you need to make use of it..."
-        else:
-            return "You have found the fabled treasure!"'''
+        player_inventory = get_inventory()
+        item_check = [item for item in player_inventory if isinstance(item, items.SmallCoin)]
+        if not item_check:
+            return "An empty clearing, maybe you need something for it to be of use to you..."
+        elif item_check:
+            player_inventory.append(items.Jewel())
+            player_inventory.remove(items.SmallCoin())
+
 
 
 class RandomTile(MapTile):
     def intro_text(self):
         print("Ahead you see a villager, let's see what he has to say.")
+        time.sleep(2.5)
         dialogue = ["Watch out behind you!", "Nobody ever came back from the castle...",
                     "Giant spiders are pushovers."]
         conversation = random.choice(dialogue)
@@ -202,12 +199,12 @@ class TraderTile(MapTile):
 
 
 world_dsl = """
-|FG|EN|EN|EN|EN|EN|FG|EN|EN|FG|EN|
+|FG|EN|EN|EN|EN|EN|FG|EN|EN|FG|S3|
 |EN|TT|EN|EN|FG|EN|EN|EN|EN|EN|EN|
-|EN|FG|RT|EN|EN|EN|FG|EN|EN|EN|EN|
-|EN|EN|ST|EN|EN|EN|EN|EN|FG|EN|FG|
-|FG|EN|S1|FG|EN|EN|FG|EN|EN|EN|EN|
-|EN|EN|S2|EN|FG|EN|EN|EN|FG|EN|FG|
+|EN|FG|S2|EN|EN|EN|FG|EN|EN|EN|EN|
+|EN|EN|ST|EN|EN|S2|EN|EN|FG|EN|FG|
+|FG|EN|S3|FG|EN|EN|FG|EN|EN|EN|EN|
+|EN|EN|S1|EN|FG|EN|EN|EN|FG|EN|FG|
 |EN|FG|EN|EN|EN|FG|TT|EN|EN|EN|EN|
 |EN|EN|EN|EN|EN|EN|FG|EN|FG|EN|EN|
 |EN|EN|FG|EN|FG|EN|EN|EN|EN|EN|VT|
@@ -236,7 +233,7 @@ tile_type_dict = {"VT": VictoryTile,
                   "TT": TraderTile,
                   "S1": StoryTileOne,
                   "S2": StoryTileTwo,
-                  #"S3": StoryTileThree,
+                  "S3": StoryTileThree,
                   "RT": RandomTile,
                   "  ": None}
 

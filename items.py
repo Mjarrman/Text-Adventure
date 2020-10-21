@@ -141,3 +141,16 @@ class IronShield(Armor):
         self.description = "A sturdy Iron Shield"
         self.defence_value = 6
         self.value = 200
+
+class Valuable:
+    def __init__(self):
+        raise NotImplementedError("Do not create raw Armor objects.")
+
+    def __str__(self):
+        return "{} {}".format(self.name, self.value)
+
+class Jewel(Valuable):
+    def __init__(self):
+        self.name = 'Jewel'
+        self.description = 'A valuable jewel'
+        self.value = 300
