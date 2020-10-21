@@ -2,6 +2,8 @@ import enemies
 import npc
 import random
 import items
+from items import SmallCoin
+from items import Jewel
 from items import QuestItem
 from inventory import get_inventory
 import time
@@ -12,18 +14,20 @@ class MapTile:
         self.x = x
         self.y = y
 
-    def intro_text(self):
+    def intro_text(self, player_inventory):
         raise NotImplementedError("Create a subclass instead!")
+        return player_inventory
 
     def modify_player(self, player):
         pass
 
 
 class StartTile(MapTile):
-    def intro_text(self):
-        return "You are on your way home from a long campaign in the hinterlands,\n" \
+    def intro_text(self, player_inventory):
+        print("You are on your way home from a long campaign in the hinterlands,\n" \
                " as you are walking down the path you come to a cross roads.\n" \
-               " you can go any of four directions."
+               " you can go any of four directions.")
+        return player_inventory
 
 
 class EnemyTile(MapTile):
@@ -55,9 +59,10 @@ class EnemyTile(MapTile):
 
         super().__init__(x, y)
 
-    def intro_text(self):
+    def intro_text(self, player_inventory):
         text = self.alive_text if self.enemy.is_alive() else self.dead_text
-        return text
+        print(text)
+        return player_inventory
 
     def modify_player(self, player):
         if self.enemy.is_alive():
@@ -70,8 +75,9 @@ class VictoryTile(MapTile):
     def modify_player(self, player):
         player.victory = True
 
-    def intro_text(self):
-        return "You have made it home to your loved ones, well done!"
+    def intro_text(self, player_inventory):
+        print("You have made it home to your loved ones, well done!")
+        return player_inventory
 
 
 class FindGoldTile(MapTile):
@@ -86,61 +92,61 @@ class FindGoldTile(MapTile):
             player.gold = player.gold + self.gold
             print("+{} gold added.".format(self.gold))
 
-    def intro_text(self):
+    def intro_text(self, player_inventory):
         if self.gold_claimed:
-            return "Another abandoned camp, best to move on."
+            print("Another abandoned camp, best to move on.")
         else:
-            return "Some unlucky soul left his worldly possessions behind, you find some gold among the tatters"
-
+            print("Some unlucky soul left his worldly possessions behind, you find some gold among the tatters")
+        return player_inventory
 
 class StoryTileOne(MapTile, QuestItem):
-    def intro_text(self):
-        player_inventory = get_inventory()
+    def intro_text(self, player_inventory):
         print("You walk into a ruined village, raided by gods knows what.\n"
               "Among the wreckage you find a small coin.\n"
               "Inscribed upon it are three unreadable runes.\n"
               "Perhaps a wizard could read them.")
         player_inventory.append(items.SmallCoin())
-        return "You have acquired a small coin."
+        print("You have acquired a small coin.")
+        return player_inventory
 
 
 class StoryTileTwo(MapTile, QuestItem):
-    def intro_text(self):
-        player_inventory = get_inventory()
+    def intro_text(self, player_inventory):
         item_check = [item for item in player_inventory if isinstance(item, items.SmallCoin)]
         if item_check:
             print("You see a strange figure in the distance.\n"
                   "As you walk closer, you realize it is a wizard.\n"
                   " Perhaps they can read the runes on the small coin you found.")
             time.sleep(2.5)
-            return "The wizard says 'the runes say, go north-east to find a great treasure...'"
+            print("The wizard says 'the runes say, go north-east to find a great treasure...'")
         else:
             print("You see a strange figure in the distance.\n"
                   "As you walk closer, you realize it is a wizard.\n")
             time.sleep(2.5)
-            return "The wizard shouts. 'You have no business with me!'"
+            print("The wizard shouts. 'You have no business with me!'")
+        return player_inventory
 
 
 class StoryTileThree(MapTile, QuestItem):
-    def intro_text(self):
-        player_inventory = get_inventory()
+    def intro_text(self, player_inventory):
         item_check = [item for item in player_inventory if isinstance(item, items.SmallCoin)]
         if not item_check:
-            return "An empty clearing, maybe you need something for it to be of use to you..."
+            print("An empty clearing, maybe you need something for it to be of use to you...")
         elif item_check:
             player_inventory.append(items.Jewel())
             player_inventory.remove(items.SmallCoin())
-
+        return player_inventory
 
 
 class RandomTile(MapTile):
-    def intro_text(self):
+    def intro_text(self, player_inventory):
         print("Ahead you see a villager, let's see what he has to say.")
         time.sleep(2.5)
         dialogue = ["Watch out behind you!", "Nobody ever came back from the castle...",
                     "Giant spiders are pushovers."]
         conversation = random.choice(dialogue)
-        return conversation
+        print(conversation)
+        return player_inventory
 
 
 class TraderTile(MapTile):
@@ -192,10 +198,11 @@ class TraderTile(MapTile):
             buyer.gold = buyer.gold - item.value
             print("Trade complete!")
 
-    def intro_text(self):
-        return "A frail not-quite human, not-quite-creature\n" \
+    def intro_text(self, player_inventory):
+        print("A frail not-quite human, not-quite-creature\n" \
                " squats in the corner clinking his gold coins\n" \
-               " together. He looks willing to trade."
+               " together. He looks willing to trade.")
+        return player_inventory
 
 
 world_dsl = """

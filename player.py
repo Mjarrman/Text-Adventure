@@ -13,6 +13,12 @@ class Player:
         self.victory = False
         self.defence = 1
 
+    def return_inventory(self):
+        return self.inventory
+
+    def update_inventory(self, new_inventory):
+        self.inventory = new_inventory
+
     def is_alive(self):
         return self.hp > 0
 

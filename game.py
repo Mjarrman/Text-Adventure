@@ -1,5 +1,4 @@
 from collections import OrderedDict
-
 from player import Player
 import world
 
@@ -10,8 +9,8 @@ def play():
     player = Player()
     while player.is_alive() and not player.victory:
         room = world.tile_at(player.x, player.y)
-        print(room.intro_text())
-        room.modify_player(player)
+        player.update_inventory(room.intro_text(player.return_inventory()))
+        room.modify_player(player.return_inventory())
         if player.is_alive() and not player.victory:
             choose_action(room, player)
         elif not player.is_alive():
