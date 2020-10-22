@@ -10,7 +10,7 @@ def play():
     while player.is_alive() and not player.victory:
         room = world.tile_at(player.x, player.y)
         player.update_inventory(room.intro_text(player.return_inventory()))
-        room.modify_player(player.return_inventory())
+        room.modify_player(player)
         if player.is_alive() and not player.victory:
             choose_action(room, player)
         elif not player.is_alive():

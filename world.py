@@ -2,10 +2,8 @@ import enemies
 import npc
 import random
 import items
-from items import SmallCoin
-from items import Jewel
 from items import QuestItem
-from inventory import get_inventory
+
 import time
 
 
@@ -16,6 +14,7 @@ class MapTile:
 
     def intro_text(self, player_inventory):
         raise NotImplementedError("Create a subclass instead!")
+        # noinspection PyUnreachableCode
         return player_inventory
 
     def modify_player(self, player):
@@ -24,9 +23,9 @@ class MapTile:
 
 class StartTile(MapTile):
     def intro_text(self, player_inventory):
-        print("You are on your way home from a long campaign in the hinterlands,\n" \
-               " as you are walking down the path you come to a cross roads.\n" \
-               " you can go any of four directions.")
+        print("You are on your way home from a long campaign in the hinterlands,\n" 
+              " as you are walking down the path you come to a cross roads.\n" 
+              " you can go any of four directions.")
         return player_inventory
 
 
@@ -99,6 +98,7 @@ class FindGoldTile(MapTile):
             print("Some unlucky soul left his worldly possessions behind, you find some gold among the tatters")
         return player_inventory
 
+
 class StoryTileOne(MapTile, QuestItem):
     def intro_text(self, player_inventory):
         print("You walk into a ruined village, raided by gods knows what.\n"
@@ -128,13 +128,28 @@ class StoryTileTwo(MapTile, QuestItem):
 
 
 class StoryTileThree(MapTile, QuestItem):
+    def __init__(self, x, y):
+        super().__init__(x, y)
+        self.jewel_claimed = 0
+        self.x = x
+        self.y = y
+
     def intro_text(self, player_inventory):
         item_check = [item for item in player_inventory if isinstance(item, items.SmallCoin)]
-        if not item_check:
+        if not item_check and not self.jewel_claimed:
             print("An empty clearing, maybe you need something for it to be of use to you...")
-        elif item_check:
+        elif item_check and not self.jewel_claimed:
             player_inventory.append(items.Jewel())
-            player_inventory.remove(items.SmallCoin())
+            self.jewel_claimed = 1
+            print("You have found an ancient treasure!")
+            print("Small Coin was removed")
+            new_player_inv = []
+            for item in player_inventory:
+                if not isinstance(item, items.SmallCoin):
+                    new_player_inv.append(item)
+            player_inventory = new_player_inv
+        elif self.jewel_claimed:
+            print("An empty clearing where you found an ancient treasure...")
         return player_inventory
 
 
@@ -184,7 +199,8 @@ class TraderTile(MapTile):
                 except ValueError or IndexError:
                     print("Invalid choice!")
 
-    def swap(self, seller, buyer, item):
+    @staticmethod
+    def swap(seller, buyer, item):
         if item.value > buyer.gold:
             print("That's too expensive")
             return
@@ -199,9 +215,9 @@ class TraderTile(MapTile):
             print("Trade complete!")
 
     def intro_text(self, player_inventory):
-        print("A frail not-quite human, not-quite-creature\n" \
-               " squats in the corner clinking his gold coins\n" \
-               " together. He looks willing to trade.")
+        print("A frail not-quite human, not-quite-creature\n"
+              "squats in the corner clinking his gold coins\n"
+              " together. He looks willing to trade.")
         return player_inventory
 
 
@@ -210,7 +226,7 @@ world_dsl = """
 |EN|TT|EN|EN|FG|EN|EN|EN|EN|EN|EN|
 |EN|FG|S2|EN|EN|EN|FG|EN|EN|EN|EN|
 |EN|EN|ST|EN|EN|S2|EN|EN|FG|EN|FG|
-|FG|EN|S3|FG|EN|EN|FG|EN|EN|EN|EN|
+|FG|EN|EN|FG|EN|EN|FG|EN|EN|EN|EN|
 |EN|EN|S1|EN|FG|EN|EN|EN|FG|EN|FG|
 |EN|FG|EN|EN|EN|FG|TT|EN|EN|EN|EN|
 |EN|EN|EN|EN|EN|EN|FG|EN|FG|EN|EN|
@@ -277,4 +293,3 @@ def tile_at(x, y):
         return world_map[y][x]
     except IndexError:
         return None
-
