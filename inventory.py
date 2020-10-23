@@ -1,7 +1,7 @@
 import items
 
 player_inventory = [items.Rock(), items.WoodenShield(), items.Dagger(), items.Fist(), items.CrustyBread(),
-                    items.CrustyBread(), items.Apple()]
+                    items.CrustyBread(), items.Apple(), items.StickWand()]
 
 
 def get_inventory():

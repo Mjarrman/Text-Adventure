@@ -41,7 +41,7 @@ def get_available_actions(room, player):
     if isinstance(room, world.EnemyTile) and room.enemy.is_alive():
         action_adder(actions, 'a', player.attack, "Attack")
     if isinstance(room, world.EnemyTile) and room.enemy.is_alive():
-        action_adder(actions, 'm', player.magic_attack(), "Magic attack")
+        action_adder(actions, 'm', player.magic_attack, "Magic attack")
 
     else:
         if world.tile_at(room.x + 1, room.y - 1):

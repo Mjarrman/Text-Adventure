@@ -169,3 +169,11 @@ class WoodenStaff(MagicalItem):
         self.description = "A sturdy wooden staff, it hums with a small amount of energy."
         self.magic_value = 15
         self.value = 100
+
+
+class StickWand(MagicalItem):
+    def __init__(self):
+        self.name = "Stick Wand"
+        self.description = "A small stick that hisses with a tiny amount of energy."
+        self.magic_value = 5
+        self.value = 10

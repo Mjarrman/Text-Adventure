@@ -33,9 +33,6 @@ def determine_determine_damage(self):
         return 1
 
 
-
-
-
 # Enemy Classes ######################
 class BatColony(Enemy):
     def __init__(self):
@@ -46,7 +43,6 @@ class BatColony(Enemy):
         self.max_damage = 8
         self.hit_pct = 50
         self.damage = determine_determine_damage(self)
-
 
 
 class GiantSpider(Enemy):

@@ -8,7 +8,7 @@ class Player:
         self.x = world.start_tile_location[0]
         self.y = world.start_tile_location[1]
         self.hp = 100
-        self.gold = 1500
+        self.gold = 100
         self.victory = False
         self.defence = 1
 
