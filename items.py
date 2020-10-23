@@ -1,15 +1,9 @@
 class QuestItem:
     def __init__(self):
         raise NotImplementedError("Do not create raw quest items!")
+
     def __str__(self):
         return self.name
-
-
-class BookOfRunes(QuestItem):
-    def __init__(self):
-        self.name = "Book of Runes"
-        self.description = "An ancient tome with runes and their meaning written in it"
-        self.value = 500
 
 
 class SmallCoin(QuestItem):
@@ -52,7 +46,6 @@ class Dagger(Weapon):
         self.value = 25
 
 
-
 class RustySword(Weapon):
     def __init__(self):
         self.name = "Rusty Sword"
@@ -65,6 +58,8 @@ class IronSword(Weapon):
     def __init__(self):
         self.name = "Iron Sword"
         self.description = "A sturdy Iron Sword"
+        self.damage = 30
+        self.value = 400
         
 
 ##############################################################################
@@ -103,6 +98,8 @@ class Apple(Consumable):
         self.healing_value = 5
         self.value = 5
 ########################################################################
+
+
 class Armor:
     def __init__(self):
         raise NotImplementedError("Do not create raw Armor objects.")
@@ -142,6 +139,7 @@ class IronShield(Armor):
         self.defence_value = 6
         self.value = 200
 
+
 class Valuable:
     def __init__(self):
         raise NotImplementedError("Do not create raw Armor objects.")
@@ -149,8 +147,25 @@ class Valuable:
     def __str__(self):
         return "{} {}".format(self.name, self.value)
 
+
 class Jewel(Valuable):
     def __init__(self):
         self.name = 'Jewel'
         self.description = 'A valuable jewel'
-        self.value = 300
+        self.value = 1500
+
+
+class MagicalItem:
+    def __init__(self):
+        raise NotImplementedError("Do not create raw MagicalItem objects.")
+
+    def __str__(self):
+        return self
+
+
+class WoodenStaff(MagicalItem):
+    def __init__(self):
+        self.name = "Wooden Staff"
+        self.description = "A sturdy wooden staff, it hums with a small amount of energy."
+        self.magic_value = 15
+        self.value = 100

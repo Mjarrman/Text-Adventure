@@ -1,10 +1,5 @@
-import enemies
-import npc
-import random
-import items
+import enemies, npc, random, items, time
 from items import QuestItem
-
-import time
 
 
 class MapTile:
@@ -165,6 +160,7 @@ class RandomTile(MapTile):
 
 
 class TraderTile(MapTile):
+    # Add a print inventory function within the trade menu
     def __init__(self, x, y):
         self.trader = npc.Trader()
         super().__init__(x, y)
@@ -223,13 +219,13 @@ class TraderTile(MapTile):
 
 world_dsl = """
 |FG|EN|EN|EN|EN|EN|FG|EN|EN|FG|S3|
-|EN|TT|EN|EN|FG|EN|EN|EN|EN|EN|EN|
-|EN|FG|S2|EN|EN|EN|FG|EN|EN|EN|EN|
+|EN|TT|FG|EN|FG|TT|EN|EN|EN|TT|EN|
+|EN|FG|S2|EN|EN|EN|FG|TT|EN|EN|EN|
 |EN|EN|ST|EN|EN|S2|EN|EN|FG|EN|FG|
-|FG|EN|EN|FG|EN|EN|FG|EN|EN|EN|EN|
+|FG|EN|TT|FG|EN|EN|FG|EN|TT|EN|EN|
 |EN|EN|S1|EN|FG|EN|EN|EN|FG|EN|FG|
 |EN|FG|EN|EN|EN|FG|TT|EN|EN|EN|EN|
-|EN|EN|EN|EN|EN|EN|FG|EN|FG|EN|EN|
+|EN|TT|EN|EN|TT|EN|FG|EN|FG|EN|EN|
 |EN|EN|FG|EN|FG|EN|EN|EN|EN|EN|VT|
 """
 

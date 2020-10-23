@@ -11,25 +11,30 @@ class Enemy:
     def is_alive(self):
         return self.hp > 0
 
+    def loot(self):
+        loot_item = ['Apple', 'Healing Potion', 'Mana Potion', 'Crusty Bread']
+        loot_rand = random.choice(loot_item)
+        loot_chance = random.randint(0, 100)
+        loot_test = self.loot_pct
+        if loot_test < loot_chance and self.hp <= 0:
+            print("The", self.name, "has dropped some loot!")
+            print(loot_rand, "was dropped!")
+            return loot_rand
+
 # Damage Modifier ###################
 
 
 def determine_determine_damage(self):
     damage = random.randint(self.min_damage, self.max_damage)
-    hit_test = random.randint(0,100)
-    if hit_test > self.hit_pct:
+    hit_test = random.randint(0, 100)
+    if hit_test >= self.hit_pct:
         return damage
     else:
-        return 0
+        return 1
 
-# Loot ###################################
-def loot(self, player_inventory):
-    loot_item = 
-    loot = random.randint(0, 100)
-    loot_test = self.loot_pct
-    if loot_test < loot:
-        print("The", self.name, "has dropped some loot!")
-        player_inventory.append(loot_item)
+
+
+
 
 # Enemy Classes ######################
 class BatColony(Enemy):
@@ -39,9 +44,9 @@ class BatColony(Enemy):
         self.loot_pct = 20
         self.min_damage = 4
         self.max_damage = 8
-        self.hit_pct = 80
+        self.hit_pct = 50
         self.damage = determine_determine_damage(self)
-        self.loot = loot()
+
 
 
 class GiantSpider(Enemy):
@@ -51,9 +56,8 @@ class GiantSpider(Enemy):
         self.loot_pct = 10
         self.min_damage = 4
         self.max_damage = 8
-        self.hit_pct = 80
+        self.hit_pct = 50
         self.damage = determine_determine_damage(self)
-        self.loot = loot()
 
 
 class Ogre(Enemy):
@@ -63,9 +67,8 @@ class Ogre(Enemy):
         self.loot_pct = 45
         self.min_damage = 5
         self.max_damage = 8
-        self.hit_pct = 80
+        self.hit_pct = 50
         self.damage = determine_determine_damage(self)
-        self.loot = loot()
 
 
 class RockMonster(Enemy):
@@ -75,9 +78,8 @@ class RockMonster(Enemy):
         self.loot_pct = 50
         self.min_damage = 6
         self.max_damage = 8
-        self.hit_pct = 70
+        self.hit_pct = 50
         self.damage = determine_determine_damage(self)
-        self.loot = loot()
 
 
 class BlackKnight(Enemy):
@@ -87,9 +89,8 @@ class BlackKnight(Enemy):
         self.loot_pct = 50
         self.min_damage = 8
         self.max_damage = 10
-        self.hit_pct = 70
+        self.hit_pct = 50
         self.damage = determine_determine_damage(self)
-        self.loot = loot()
 
 
 class HulkingBeast(Enemy):
@@ -99,6 +100,6 @@ class HulkingBeast(Enemy):
         self.loot_pct = 60
         self.min_damage = 10
         self.max_damage = 12
-        self.hit_pct = 60
+        self.hit_pct = 50
         self.damage = determine_determine_damage(self)
-        self.loot = loot()
+

@@ -18,14 +18,6 @@ class Trader(NonPlayableCharacter):
                           items.RustySword(),
                           items.LeatherArmor(),
                           items.IronArmor(),
-                          items.IronSword,
-                          items.IronShield,]
-
-
-class Wizard(NonPlayableCharacter):
-    def __init__(self):
-        self.name = "Wizard"
-        self.gold = 1
-        self.inventory = [items.BookOfRunes()]
-
-
+                          items.IronSword(),
+                          items.IronShield(),
+                          items.WoodenStaff()]

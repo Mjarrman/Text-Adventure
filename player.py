@@ -1,5 +1,4 @@
-import items
-import world
+import items, world
 from inventory import get_inventory
 
 
@@ -9,7 +8,7 @@ class Player:
         self.x = world.start_tile_location[0]
         self.y = world.start_tile_location[1]
         self.hp = 100
-        self.gold = 15
+        self.gold = 1500
         self.victory = False
         self.defence = 1
 
@@ -64,12 +63,25 @@ class Player:
             choice = input("")
             try:
                 to_eat = consumables[int(choice) - 1]
-                self.hp = max(100, self.hp + to_eat.healing_value)
+                self.hp = min(100, self.hp + to_eat.healing_value)
                 self.inventory.remove(to_eat)
                 print("Current HP: {}".format(self.hp))
                 valid = True
             except (ValueError, IndexError):
                 print("Invalid choice, try again.")
+
+    def most_magical_weapon(self):
+        max_damage = 0
+        best_weapon = None
+        for item in self.inventory:
+            try:
+                if item.magic_value > max_damage:
+                    best_weapon = item
+                    max_damage = item.magic_value
+            except AttributeError:
+                pass
+
+        return best_weapon
 
     def most_powerful_weapon(self):
         max_damage = 0
@@ -100,6 +112,18 @@ class Player:
     def move_west(self):
         self.move(dx=-1, dy=0)
 
+    def magic_attack(self):
+        best_weapon = self.most_magical_weapon()
+        room = world.tile_at(self.x, self.y)
+        enemy = room.enemy
+        print("you use {} against {}!".format(best_weapon.name, enemy.name))
+        enemy.hp -= best_weapon.magic_value
+        if not enemy.is_alive():
+            print("You killed the {}".format(enemy.name))
+            self.inventory.append(enemy.loot())
+        else:
+            print("{} HP is {}".format(enemy.name, enemy.hp))
+
     def attack(self):
         best_weapon = self.most_powerful_weapon()
         room = world.tile_at(self.x, self.y)
@@ -108,6 +132,7 @@ class Player:
         enemy.hp -= best_weapon.damage
         if not enemy.is_alive():
             print("You killed {}!".format(enemy.name))
+            self.inventory.append(enemy.loot())
         else:
             print("{} HP is {}.".format(enemy.name, enemy.hp))
 
