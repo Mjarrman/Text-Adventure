@@ -42,14 +42,10 @@ class EnemyTile(MapTile):
             self.alive_text = "You hear a squeaking noise growing louder\nsuddenly you are lost in a swarm of bats!"
             self.dead_text = "Dozens of dead bats are scattered on the ground."
 
-        elif r <= 4:
+        else:
             self.enemy = enemies.RockMonster()
             self.alive_text = "You've disturbed a rock monster!"
             self.dead_text = "Defeated, the monster has gone into a deep hibernation and appears to be a normal rock."
-        else:
-            self.enemy = enemies.BlackKnight()
-            self.alive_text = "A black knight charges at you!"
-            self.dead_text = "With a piercing wail the black knight crumbles to ash before you."
 
         super().__init__(x, y)
 
@@ -60,6 +56,50 @@ class EnemyTile(MapTile):
 
     def modify_player(self, player):
         if self.enemy.is_alive():
+            player.hp = player.hp - self.enemy.damage / (player.defence / 2)
+            print("Enemy does {} damage. You have {} HP remaining.".
+                  format(self.enemy.damage, player.hp))
+
+
+class BlackKnightTile(MapTile):
+    def __init__(self, x, y):
+        r = random.randint(0, 5)
+        if r >= 2.5:
+            self.enemy = enemies.BlackKnight()
+            self.alive_text = "A black knight charges at you!"
+            self.dead_text = "With a piercing wail the black knight crumbles to ash before you."
+        else:
+            print("There is nothing here but a deep sense of dread,\n"
+                  "perhaps you just missed a powerful enemy...")
+
+        super().__init__(x, y)
+
+    def intro_text(self, player_inventory):
+        text = self.alive_text if self.enemy.is_alive() else self.dead_text
+        print(text)
+        return player_inventory
+
+    def modify_player(self, player):
+        if self.enemy.is_alive():
+            player.hp = player.hp - self.enemy.damage / (player.defence / 2)
+            print("Enemy does {} damage. You have {} HP remaining.".
+                  format(self.enemy.damage, player.hp))
+
+
+class BossTile(MapTile):
+    def __init__(self, x, y):
+        self.enemy = enemies.HulkingBeast
+        self.alive_text = "A hulking monstrosity looms before you! With a piercing screech it leaps at you!"
+        self.dead_text = "With a final wail, the Hulking Beast falls before your might"
+        super().__init__(x, y)
+
+    def intro_text(self, player_inventory):
+        text = self.alive_text if self.enemy.is_alive else self.dead_text
+        print(text)
+        return player_inventory
+
+    def modify_player(self, player):
+        if self.enemy.is_alive:
             player.hp = player.hp - self.enemy.damage / (player.defence / 2)
             print("Enemy does {} damage. You have {} HP remaining.".
                   format(self.enemy.damage, player.hp))
@@ -96,13 +136,17 @@ class FindGoldTile(MapTile):
 
 class StoryTileOne(MapTile, QuestItem):
     def intro_text(self, player_inventory):
-        print("You walk into a ruined village, raided by gods knows what.\n"
-              "Among the wreckage you find a small coin.\n"
-              "Inscribed upon it are three unreadable runes.\n"
-              "Perhaps a wizard could read them.")
-        player_inventory.append(items.SmallCoin())
-        print("You have acquired a small coin.")
-        return player_inventory
+        item_check = [item for item in player_inventory if isinstance(item, items.SmallCoin)]
+        if not item_check:
+            print("You walk into a ruined village, raided by gods knows what.\n"
+                  "Among the wreckage you find a small coin.\n"
+                  "Inscribed upon it are three unreadable runes.\n"
+                  "Perhaps a wizard could read them.")
+            player_inventory.append(items.SmallCoin())
+            print("You have acquired a small coin.")
+            return player_inventory
+        else:
+            print("You have already been through this village, it is where you found the small coin")
 
 
 class StoryTileTwo(MapTile, QuestItem):
@@ -148,6 +192,20 @@ class StoryTileThree(MapTile, QuestItem):
         return player_inventory
 
 
+class StoryTileFour(MapTile, QuestItem):
+    def intro_text(self, player_inventory):
+        print("You are walking through a thick forest,\n"
+              "There are gnarled oaks all throughout.\n"
+              "as you walk into a small clearing you see an oak that is bigger than the rest.\n"
+              "You walk up to the ancient oak you hear a voice whisper...\n")
+        time.sleep(2.5)
+        print("'You must find the ancient key to open our secrets....'")
+        print("'Go west to find the key...'")
+
+    def modify_player(self, player):
+        pass
+
+
 class RandomTile(MapTile):
     def intro_text(self, player_inventory):
         print("Ahead you see a villager, let's see what he has to say.")
@@ -159,8 +217,15 @@ class RandomTile(MapTile):
         return player_inventory
 
 
+class MountainTile(MapTile):
+    def intro_text(self, player_inventory):
+        print("Unpassable mountains...")
+
+    def modify_player(self, player):
+        pass
+
+
 class TraderTile(MapTile):
-    # Add a print inventory function within the trade menu
     def __init__(self, x, y):
         self.trader = npc.Trader()
         super().__init__(x, y)
@@ -181,9 +246,9 @@ class TraderTile(MapTile):
                 print("Invalid choice!")
 
     def trade(self, buyer, seller):
-        for i, item in enumerate(seller.inventory, 1):
-            print("{}. {} - {} Gold".format(i, item.name, item.value))
         while True:
+            for i, item in enumerate(seller.inventory, 1):
+                print("{}. {} - {} Gold".format(i, item.name, item.value))
             user_input = input("Choose an item or press Q to exit: ")
             if user_input in ['Q', 'q']:
                 return
@@ -219,14 +284,14 @@ class TraderTile(MapTile):
 
 world_dsl = """
 |FG|EN|EN|EN|EN|EN|FG|EN|EN|FG|S3|
-|EN|TT|FG|EN|FG|TT|EN|EN|EN|TT|EN|
-|EN|FG|S2|EN|EN|EN|FG|TT|EN|EN|EN|
-|EN|EN|ST|EN|EN|S2|EN|EN|FG|EN|FG|
-|FG|EN|TT|FG|EN|EN|FG|EN|TT|EN|EN|
-|EN|EN|S1|EN|FG|EN|EN|EN|FG|EN|FG|
-|EN|FG|EN|EN|EN|FG|TT|EN|EN|EN|EN|
-|EN|TT|EN|EN|TT|EN|FG|EN|FG|EN|EN|
-|EN|EN|FG|EN|FG|EN|EN|EN|EN|EN|VT|
+|EN|TT|KT|EN|FG|TT|KT|EN|EN|TT|EN|
+|EN|FG|BT|EN|EN|EN|FG|TT|EN|EN|EN|
+|EN|KT|ST|EN|KT|S2|EN|EN|FG|KT|FG|
+|FG|EN|S1|FG|EN|EN|FG|EN|TT|EN|EN|
+|EN|EN|TT|EN|FG|KT|EN|MT|MT|KT|MT|
+|KT|FG|EN|EN|EN|FG|TT|MT|KT|KT|KT|
+|EN|TT|EN|EN|TT|EN|FG|MT|MT|BT|MT|
+|EN|EN|FG|KT|FG|EN|KT|MT|MT|VT|MT|
 """
 
 
@@ -254,6 +319,9 @@ tile_type_dict = {"VT": VictoryTile,
                   "S2": StoryTileTwo,
                   "S3": StoryTileThree,
                   "RT": RandomTile,
+                  "MT": MountainTile,
+                  "KT": BlackKnightTile,
+                  "BT": BossTile,
                   "  ": None}
 
 world_map = []

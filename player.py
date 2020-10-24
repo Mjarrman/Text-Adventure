@@ -11,6 +11,7 @@ class Player:
         self.gold = 100
         self.victory = False
         self.defence = 1
+        self.mana = 10
 
     def return_inventory(self):
         return self.inventory
@@ -20,6 +21,21 @@ class Player:
 
     def is_alive(self):
         return self.hp > 0
+
+    def print_map(self):
+
+        for y_line in range(9):
+            for x_line in range(11):
+                if self.x == x_line and y_line == self.y:
+                    print(" #", end="")
+                elif (x_line == 7 and y_line == 5) or (x_line == 7 and y_line == 6) or (
+                        x_line == 7 and y_line == 7) or (x_line == 7 and y_line == 8) or (
+                        x_line == 8 and y_line == 5) or (x_line == 10 and y_line == 5):
+                    print(" ⌂", end="")
+                else:
+                    print(" |", end="")
+
+            print("")
 
     def print_inventory(self):
         print("Inventory:")
@@ -44,6 +60,30 @@ class Player:
                 self.defence = min(200, self.defence + to_equip.defence_value)
                 self.inventory.remove(to_equip)
                 print("Current defence: {}".format(self.defence))
+                valid = True
+            except (ValueError, IndexError):
+                print("Invalid choice, try again.")
+
+    def regen_mana(self):
+        consumables = [item for item in self.inventory if isinstance(item, items.Consumable)]
+        if not consumables:
+            print("You don't have any items to charge your mana!")
+            return
+
+        for i, item in enumerate(consumables, 1):
+            print("Choose an item to use to charge your mana: ")
+            print("{}. {}".format(i, item))
+
+        valid = False
+        while not valid:
+            choice = input("")
+            try:
+                to_charge = consumables[int(choice) - 1]
+                self.hp = min(100, self.hp + to_charge.mana_value)
+            except AttributeError:
+                print("This item has no mana value")
+                self.inventory.remove(to_charge)
+                print("Current Mana: {}".format(self.mana))
                 valid = True
             except (ValueError, IndexError):
                 print("Invalid choice, try again.")
@@ -116,8 +156,14 @@ class Player:
         best_weapon = self.most_magical_weapon()
         room = world.tile_at(self.x, self.y)
         enemy = room.enemy
-        print("you use {} against {}!".format(best_weapon.name, enemy.name))
-        enemy.hp -= best_weapon.magic_value
+        if self.mana >= 10:
+            print("you use {} against {}!".format(best_weapon.name, enemy.name))
+            enemy.hp -= best_weapon.magic_value
+            self.mana = self.mana - 10
+            print("You mana is now {}".format(self.mana))
+        else:
+            print("Your mana is too low to cast anything!")
+
         if not enemy.is_alive():
             print("You killed the {}".format(enemy.name))
             self.inventory.append(enemy.loot())

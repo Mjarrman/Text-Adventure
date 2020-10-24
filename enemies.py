@@ -41,7 +41,7 @@ class BatColony(Enemy):
         self.loot_pct = 20
         self.min_damage = 4
         self.max_damage = 8
-        self.hit_pct = 50
+        self.hit_pct = 20
         self.damage = determine_determine_damage(self)
 
 
@@ -52,7 +52,7 @@ class GiantSpider(Enemy):
         self.loot_pct = 10
         self.min_damage = 4
         self.max_damage = 8
-        self.hit_pct = 50
+        self.hit_pct = 20
         self.damage = determine_determine_damage(self)
 
 
@@ -63,7 +63,7 @@ class Ogre(Enemy):
         self.loot_pct = 45
         self.min_damage = 5
         self.max_damage = 8
-        self.hit_pct = 50
+        self.hit_pct = 20
         self.damage = determine_determine_damage(self)
 
 
@@ -74,7 +74,7 @@ class RockMonster(Enemy):
         self.loot_pct = 50
         self.min_damage = 6
         self.max_damage = 8
-        self.hit_pct = 50
+        self.hit_pct = 20
         self.damage = determine_determine_damage(self)
 
 
@@ -85,7 +85,7 @@ class BlackKnight(Enemy):
         self.loot_pct = 50
         self.min_damage = 8
         self.max_damage = 10
-        self.hit_pct = 50
+        self.hit_pct = 20
         self.damage = determine_determine_damage(self)
 
 
@@ -96,6 +96,6 @@ class HulkingBeast(Enemy):
         self.loot_pct = 60
         self.min_damage = 10
         self.max_damage = 12
-        self.hit_pct = 50
+        self.hit_pct = 20
         self.damage = determine_determine_damage(self)
 

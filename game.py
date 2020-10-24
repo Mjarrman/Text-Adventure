@@ -32,6 +32,8 @@ def choose_action(room, player):
 def get_available_actions(room, player):
     actions = OrderedDict()
     print("Choose an action: ")
+    action_adder(actions, 'p', player.print_map, 'Print map')
+
     if player.inventory:
         action_adder(actions, 'i', player.print_inventory, "Print inventory")
     if player.equip:
@@ -54,7 +56,8 @@ def get_available_actions(room, player):
             action_adder(actions, 'w', player.move_west, "Go west")
     if player.hp < 100:
         action_adder(actions, 'h', player.heal, "Heal")
-
+    if player.mana < 100:
+        action_adder(actions, 'k', player.regen_mana, 'Mana')
     return actions
 
 

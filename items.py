@@ -160,7 +160,7 @@ class MagicalItem:
         raise NotImplementedError("Do not create raw MagicalItem objects.")
 
     def __str__(self):
-        return self
+        return "{} {}".format(self.name, self.value)
 
 
 class WoodenStaff(MagicalItem):
