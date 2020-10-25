@@ -1,8 +1,10 @@
-import items, world
+import items
+import world
 from inventory import get_inventory
-
+from game import difficulty
 
 class Player:
+if difficulty == '1':
     def __init__(self):
         self.inventory = get_inventory()
         self.x = world.start_tile_location[0]
@@ -11,7 +13,7 @@ class Player:
         self.gold = 100
         self.victory = False
         self.defence = 1
-        self.mana = 10
+        self.mana = 100
 
     def return_inventory(self):
         return self.inventory
@@ -40,7 +42,7 @@ class Player:
     def print_inventory(self):
         print("Inventory:")
         for item in self.inventory:
-            print('* ' + str(item))
+            print('* ' + str(item) + ',' + str(item.description))
         print("Gold: {}".format(self.gold))
 
     def equip(self):
@@ -159,7 +161,7 @@ class Player:
         if self.mana >= 10:
             print("you use {} against {}!".format(best_weapon.name, enemy.name))
             enemy.hp -= best_weapon.magic_value
-            self.mana = self.mana - 10
+            self.mana = self.mana - best_weapon.magic_value
             print("You mana is now {}".format(self.mana))
         else:
             print("Your mana is too low to cast anything!")

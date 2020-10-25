@@ -98,4 +98,3 @@ class HulkingBeast(Enemy):
         self.max_damage = 12
         self.hit_pct = 20
         self.damage = determine_determine_damage(self)
-

@@ -1,4 +1,6 @@
 import items
+
+
 class NonPlayableCharacter():
     def __init__(self):
         raise NotImplementedError("Do not create raw NPC objects.")

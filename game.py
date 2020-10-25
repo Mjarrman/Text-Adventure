@@ -5,6 +5,7 @@ import world
 
 def play():
     print("A Long Journey")
+    difficulty = input("Choose your difficulty, 1. easy, 2. hard, 3. extreme")
     world.parse_world_dsl()
     player = Player()
     while player.is_alive() and not player.victory:
@@ -40,9 +41,8 @@ def get_available_actions(room, player):
         action_adder(actions, 'x', player.equip, "Equip")
     if isinstance(room, world.TraderTile):
         action_adder(actions, 't', player.trade, "Trade")
-    if isinstance(room, world.EnemyTile) and room.enemy.is_alive():
+    if (isinstance(room, world.EnemyTile) or isinstance(room, world.BlackKnightTile) or isinstance(room, world.BossTile)) and room.enemy.is_alive():
         action_adder(actions, 'a', player.attack, "Attack")
-    if isinstance(room, world.EnemyTile) and room.enemy.is_alive():
         action_adder(actions, 'm', player.magic_attack, "Magic attack")
 
     else:
