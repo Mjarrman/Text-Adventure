@@ -5,7 +5,7 @@ import world
 
 def play():
     print("A Long Journey")
-    difficulty = input("Choose your difficulty, 1. easy, 2. hard, 3. extreme")
+
     world.parse_world_dsl()
     player = Player()
     while player.is_alive() and not player.victory:

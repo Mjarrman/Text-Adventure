@@ -150,7 +150,7 @@ class IronShield(Armor):
         self.defence_value = 6
         self.value = 200
 
-
+#################################################
 class Valuable:
     def __init__(self):
         raise NotImplementedError("Do not create raw Armor objects.")
@@ -165,7 +165,7 @@ class Jewel(Valuable):
         self.description = " A valuable jewel"
         self.value = 1500
 
-
+############################################################
 class MagicalItem:
     def __init__(self):
         raise NotImplementedError("Do not create raw MagicalItem objects.")

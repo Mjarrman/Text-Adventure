@@ -1,10 +1,10 @@
 import items
 import world
 from inventory import get_inventory
-from game import difficulty
+
 
 class Player:
-if difficulty == '1':
+
     def __init__(self):
         self.inventory = get_inventory()
         self.x = world.start_tile_location[0]
